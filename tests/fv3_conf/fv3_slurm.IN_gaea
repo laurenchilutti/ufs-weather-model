@@ -23,13 +23,18 @@ module list
 echo "Model started:  " `date`
 
 export OMP_NUM_THREADS=@[THRD]
+export SINGULARITYENV_OMP_NUM_THREADS=${OMP_NUM_THREADS}
 export OMP_STACKSIZE=1024M
+export SINGULARITYENV_OMP_STACKSIZE=${OMP_STACKSIZE}
 export NC_BLKSZ=1M
+export SINGULARITYENV_NCBLKSZ=${NC_BLKSZ}
 
 # Avoid job errors because of filesystem synchronization delays
 sync && sleep 1
 
-srun --label -n @[TASKS] ./fv3.exe
+#srun --label -n @[TASKS] ./fv3.exe
+module list
+srun --mpi=pmi2 --label -n @[TASKS] singularity exec -B ${PDATA},${DEV}/gfdl/${USER},${SCRATCH}/${USER} /lustre/f2/dev/gfdl/Thomas.Robinson/containers/environment_container_intel2021.4.sif /lustre/f2/dev/gfdl/Lauren.Chilutti/ufs-weather-model/tests/singularity_ufs_executable.sh
 
 echo "Model ended:    " `date`
 echo -n " $( date +%s )," >> job_timestamp.txt

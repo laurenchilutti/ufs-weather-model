@@ -218,8 +218,8 @@ elif [[ $MACHINE_ID = gaea.* ]]; then
   DISKNM=/lustre/f2/pdata/ncep_shared/emc.nemspara/RT
   QUEUE=normal
   COMPILE_QUEUE=normal
-#  ACCNR=cmp
-  PARTITION=c4
+  ACCNR=gfdl_f
+  PARTITION=t4
   STMP=/lustre/f2/scratch
   PTMP=/lustre/f2/scratch
 
@@ -691,6 +691,8 @@ EOF
     elif [[ $ECFLOW == true ]]; then
       ecflow_create_compile_task
     else
+      echo $PWD
+      echo $LOG_DIR
       ./compile.sh $MACHINE_ID "${MAKE_OPT}" $COMPILE_NR > ${LOG_DIR}/compile_${COMPILE_NR}.log 2>&1
       mv compile_${COMPILE_NR}_time.log ${LOG_DIR}
     fi
